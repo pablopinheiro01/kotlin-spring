@@ -10,6 +10,6 @@ class HelloController {
 
     @GetMapping
     fun hello(): String{
-        return "E noix pai e mae"
+        return "teste"
     }
 }
