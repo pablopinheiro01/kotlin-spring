@@ -1,11 +1,10 @@
 package br.com.alura.forum.service
 
-import br.com.alura.forum.dto.TopicoDto
-import br.com.alura.forum.model.Curso
+import br.com.alura.forum.dto.TopicoForm
+import br.com.alura.forum.dto.TopicoView
 import br.com.alura.forum.model.Topico
-import br.com.alura.forum.model.Usuario
 import org.springframework.stereotype.Service
-import java.util.*
+import java.util.stream.Collectors
 
 @Service
 class TopicoService(
@@ -15,14 +14,34 @@ class TopicoService(
 ) {
 
 
-    fun listar(): List<Topico> = topicos
+    fun listar(): List<TopicoView>{
+        return topicos.stream().map { topico ->
+            TopicoView(
+                id = topico.id,
+                titulo = topico.titulo,
+                mensagem = topico.mensagem,
+                dataCriaca = topico.dataCriacao,
+                status = topico.status
+            )
+        }.collect(Collectors.toList())
+    }
 
-    fun buscaPorId(id: Long): Topico =
-        topicos.stream().filter { topico ->
+    fun buscaPorId(id: Long): TopicoView {
+
+        val topicoFilter = topicos.stream().filter { topico ->
             topico.id == id
         }.findFirst().get()
 
-    fun cadastrar(dto: TopicoDto) {
+        return TopicoView(
+            id = topicoFilter.id,
+            titulo = topicoFilter.titulo,
+            mensagem = topicoFilter.mensagem,
+            dataCriaca = topicoFilter.dataCriacao,
+            status = topicoFilter.status
+        )
+    }
+
+    fun cadastrar(dto: TopicoForm) {
         val topico = Topico(
             id = topicos.size.toLong() + 1,
             titulo = dto.titulo,
