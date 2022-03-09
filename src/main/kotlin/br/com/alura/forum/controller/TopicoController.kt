@@ -4,6 +4,7 @@ import br.com.alura.forum.dto.TopicoForm
 import br.com.alura.forum.dto.TopicoView
 import br.com.alura.forum.service.TopicoService
 import org.springframework.web.bind.annotation.*
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("/topicos")
@@ -16,7 +17,7 @@ class TopicoController(private val topicoService: TopicoService){
     fun buscaPorId(@PathVariable id:Long): TopicoView = topicoService.buscaPorId(id)
 
     @PostMapping
-    fun cadastrar(@RequestBody dto: TopicoForm){
+    fun cadastrar(@RequestBody @Valid dto: TopicoForm){
         topicoService.cadastrar(dto)
     }
 
