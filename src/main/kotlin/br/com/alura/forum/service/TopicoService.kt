@@ -1,16 +1,18 @@
 package br.com.alura.forum.service
 
+import br.com.alura.forum.dto.AtualizacaoTopicoForm
 import br.com.alura.forum.dto.TopicoForm
 import br.com.alura.forum.dto.TopicoView
 import br.com.alura.forum.mapper.TopicoFormMapper
 import br.com.alura.forum.mapper.TopicoViewMapper
 import br.com.alura.forum.model.Topico
 import org.springframework.stereotype.Service
+import java.util.*
 import java.util.stream.Collectors
 
 @Service
 class TopicoService(
-    private var topicos: MutableList<Topico>,
+    private var topicos: List<Topico> = ArrayList(),
     private val topicoViewMapper: TopicoViewMapper,
     private val topicoFormMapper: TopicoFormMapper
 ) {
@@ -34,7 +36,37 @@ class TopicoService(
     fun cadastrar(form: TopicoForm) {
         var topico = topicoFormMapper.map(form)
         topico.id = topicos.size.toLong() +1
-        topicos.add(topico)
+        topicos = topicos.plus(topico)
+    }
+
+    fun atualizar(form: AtualizacaoTopicoForm) {
+
+        val topicoFilter = topicos.stream().filter { topico ->
+            topico.id == form.id
+        }.findFirst().get()
+
+        topicos = topicos.minus(topicoFilter).plus(
+            Topico(
+                id = form.id,
+                titulo = form.titulo,
+                mensagem = form.mensagem,
+                autor = topicoFilter.autor,
+                dataCriacao = topicoFilter.dataCriacao,
+                curso = topicoFilter.curso,
+                status = topicoFilter.status,
+                respostas = topicoFilter.respostas
+            )
+        )
+
+    }
+
+    fun delete(id: Long) {
+        val topicoFilter = topicos.stream().filter { topico ->
+            topico.id == id
+        }.findFirst().get()
+
+        topicos = topicos.minus(topicoFilter)
+
     }
 
 
