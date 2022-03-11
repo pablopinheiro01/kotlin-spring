@@ -21,8 +21,23 @@ class TopicoService(
 ) {
 
 
-    fun listar(): List<TopicoView>{
-        return repository.findAll().stream().map { topico ->
+    fun listar(nomeCurso: String?): List<TopicoView>{
+        //forma convencional
+//        var topicos: List<Topico> = if (nomeCurso == null ){
+//            repository.findAll()
+//        } else {
+//            repository.findByCursoNome(nomeCurso)
+//        }
+        //utilizando recursos do Kotlin
+        var topicos: List<Topico> = listOf()
+
+        nomeCurso?.let {
+            topicos = repository.findByCursoNome(nomeCurso)
+        }?:run{
+           topicos = repository.findAll()
+        }
+
+        return topicos.stream().map { topico ->
             topicoViewMapper.map(topico)
         }.collect(Collectors.toList())
     }

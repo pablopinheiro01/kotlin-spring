@@ -10,13 +10,14 @@ import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.util.UriComponentsBuilder
 import javax.validation.Valid
+import javax.websocket.server.PathParam
 
 @RestController
 @RequestMapping("/topicos")
 class TopicoController(private val topicoService: TopicoService){
 
     @GetMapping
-    fun listar(): List<TopicoView> = topicoService.listar()
+    fun listar(@RequestParam(required = false) nomeCurso: String?): List<TopicoView> = topicoService.listar(nomeCurso)
 
     @GetMapping("/{id}")
     fun buscaPorId(@PathVariable id:Long): TopicoView = topicoService.buscaPorId(id)
