@@ -8,6 +8,8 @@ import br.com.alura.forum.mapper.TopicoFormMapper
 import br.com.alura.forum.mapper.TopicoViewMapper
 import br.com.alura.forum.model.Topico
 import br.com.alura.forum.repository.TopicoRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.util.*
 import java.util.stream.Collectors
@@ -21,7 +23,10 @@ class TopicoService(
 ) {
 
 
-    fun listar(nomeCurso: String?): List<TopicoView>{
+    fun listar(
+        nomeCurso: String?,
+        paginacao: Pageable
+    ): Page<TopicoView>{
         //forma convencional
 //        var topicos: List<Topico> = if (nomeCurso == null ){
 //            repository.findAll()
@@ -29,17 +34,17 @@ class TopicoService(
 //            repository.findByCursoNome(nomeCurso)
 //        }
         //utilizando recursos do Kotlin
-        var topicos: List<Topico> = listOf()
+        var topicos: Page<Topico> = Page.empty()
 
         nomeCurso?.let {
-            topicos = repository.findByCursoNome(nomeCurso)
+            topicos = repository.findByCursoNome(nomeCurso,paginacao)
         }?:run{
-           topicos = repository.findAll()
+           topicos = repository.findAll(paginacao)
         }
 
-        return topicos.stream().map { topico ->
+        return topicos.map { topico ->
             topicoViewMapper.map(topico)
-        }.collect(Collectors.toList())
+        }
     }
 
     fun buscaPorId(id: Long): TopicoView {

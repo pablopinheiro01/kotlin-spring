@@ -4,6 +4,9 @@ import br.com.alura.forum.dto.AtualizacaoTopicoForm
 import br.com.alura.forum.dto.TopicoForm
 import br.com.alura.forum.dto.TopicoView
 import br.com.alura.forum.service.TopicoService
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.transaction.annotation.Transactional
@@ -17,7 +20,11 @@ import javax.websocket.server.PathParam
 class TopicoController(private val topicoService: TopicoService){
 
     @GetMapping
-    fun listar(@RequestParam(required = false) nomeCurso: String?): List<TopicoView> = topicoService.listar(nomeCurso)
+    fun listar(
+        @RequestParam(required = false) nomeCurso: String?,
+        //anotacao PageableDefault auxilia na configuracao inicial da paginacao
+        @PageableDefault(size=3)paginacao: Pageable //Spring conhece o parametro e ele consegue instanciar e enviar para a busca na lista
+    ): Page<TopicoView> = topicoService.listar(nomeCurso, paginacao)
 
     @GetMapping("/{id}")
     fun buscaPorId(@PathVariable id:Long): TopicoView = topicoService.buscaPorId(id)
