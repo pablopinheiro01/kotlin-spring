@@ -1,6 +1,7 @@
 package br.com.alura.forum.repository
 
 import br.com.alura.forum.dto.TopicoPorCategoriaDto
+import br.com.alura.forum.dto.TopicosNaoRespondidosDto
 import br.com.alura.forum.model.Topico
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -14,5 +15,9 @@ interface TopicoRepository: JpaRepository<Topico, Long> {
 
     @Query("SELECT new br.com.alura.forum.dto.TopicoPorCategoriaDto(curso.categoria, count(t)) FROM Topico t JOIN t.curso curso GROUP BY curso.categoria")
     fun relatorio(): List<TopicoPorCategoriaDto>
+
+
+    @Query(value = "SELECT new br.com.alura.forum.dto.TopicosNaoRespondidosDto(t.status, t.id, t.mensagem, t.titulo) FROM Topico t WHERE t.status = 'NAO_RESPONDIDO' ")
+    fun topicosNaoRespondidos(): List<TopicosNaoRespondidosDto>
 
 }

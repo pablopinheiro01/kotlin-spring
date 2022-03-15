@@ -1,9 +1,6 @@
 package br.com.alura.forum.service
 
-import br.com.alura.forum.dto.AtualizacaoTopicoForm
-import br.com.alura.forum.dto.TopicoForm
-import br.com.alura.forum.dto.TopicoPorCategoriaDto
-import br.com.alura.forum.dto.TopicoView
+import br.com.alura.forum.dto.*
 import br.com.alura.forum.exception.NotFoundException
 import br.com.alura.forum.mapper.TopicoFormMapper
 import br.com.alura.forum.mapper.TopicoViewMapper
@@ -85,6 +82,10 @@ class TopicoService(
 
     fun relatorio(): List<TopicoPorCategoriaDto> {
         return repository.relatorio()
+    }
+
+    fun topicosNaoRespondidos(): List<TopicosNaoRespondidosDto> {
+    return repository.topicosNaoRespondidos()
     }
 
 

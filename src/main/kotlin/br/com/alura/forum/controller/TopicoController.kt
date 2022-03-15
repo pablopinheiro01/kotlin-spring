@@ -1,9 +1,6 @@
 package br.com.alura.forum.controller
 
-import br.com.alura.forum.dto.AtualizacaoTopicoForm
-import br.com.alura.forum.dto.TopicoForm
-import br.com.alura.forum.dto.TopicoPorCategoriaDto
-import br.com.alura.forum.dto.TopicoView
+import br.com.alura.forum.dto.*
 import br.com.alura.forum.service.TopicoService
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
@@ -71,6 +68,11 @@ class TopicoController(private val topicoService: TopicoService){
     @GetMapping("/relatorio")
     fun topicosRelatorio():List<TopicoPorCategoriaDto>{
         return topicoService.relatorio()
+    }
+
+    @GetMapping("/topicosNaoRespondidos")
+    fun topicosNaoRespondidos():List<TopicosNaoRespondidosDto>{
+        return topicoService.topicosNaoRespondidos()
     }
 
 }
