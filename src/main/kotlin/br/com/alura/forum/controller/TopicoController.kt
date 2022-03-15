@@ -4,6 +4,8 @@ import br.com.alura.forum.dto.AtualizacaoTopicoForm
 import br.com.alura.forum.dto.TopicoForm
 import br.com.alura.forum.dto.TopicoView
 import br.com.alura.forum.service.TopicoService
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
@@ -20,11 +22,18 @@ import javax.websocket.server.PathParam
 @RequestMapping("/topicos")
 class TopicoController(private val topicoService: TopicoService){
 
+    //exemplo de consumo direto na url /topicos?size=25&sort=dataCriacao,desc&sort=titulo&page=2
+    //https://docs.spring.io/spring-data/rest/docs/current/reference/html/#paging-and-sorting
     @GetMapping
+    @Cacheable(value=["topicos"]) //configurado apenas para fins didaticos
     fun listar(
         @RequestParam(required = false) nomeCurso: String?,
         //anotacao PageableDefault auxilia na configuracao inicial da paginacao
-        @PageableDefault(size=3, sort=["dataCriacao"], direction = Sort.Direction.ASC) paginacao: Pageable //Spring conhece o parametro e ele consegue instanciar e enviar para a busca na lista
+        @PageableDefault(
+            size=5,
+            sort=["dataCriacao"],
+            direction = Sort.Direction.ASC
+        ) paginacao: Pageable //Spring conhece o parametro e ele consegue instanciar e enviar para a busca na lista
     ): Page<TopicoView> = topicoService.listar(nomeCurso, paginacao)
 
     @GetMapping("/{id}")
@@ -32,6 +41,7 @@ class TopicoController(private val topicoService: TopicoService){
 
     @PostMapping
     @Transactional
+    @CacheEvict(value=["topicos"], allEntries = true)//limpa o cache de nome value
     fun cadastrar(
         @RequestBody @Valid form: TopicoForm,
         uriBuilder: UriComponentsBuilder
@@ -43,6 +53,7 @@ class TopicoController(private val topicoService: TopicoService){
 
     @PutMapping
     @Transactional
+    @CacheEvict(value=["topicos"], allEntries = true)//limpa o cache de nome value
     fun update(@RequestBody @Valid form: AtualizacaoTopicoForm): ResponseEntity<TopicoView>{
         val topico = topicoService.atualizar(form)
         return ResponseEntity.ok(topico)
@@ -51,6 +62,7 @@ class TopicoController(private val topicoService: TopicoService){
     @DeleteMapping("/{id}")
     @Transactional
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CacheEvict(value=["topicos"], allEntries = true)//limpa o cache de nome value
     fun delete(@PathVariable id:Long){
         topicoService.delete(id)
     }
