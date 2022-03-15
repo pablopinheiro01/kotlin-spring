@@ -14,13 +14,15 @@ import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.util.*
 import java.util.stream.Collectors
+import javax.persistence.EntityManager
 
 @Service
 class TopicoService(
     private val repository: TopicoRepository,
     private val topicoViewMapper: TopicoViewMapper,
     private val topicoFormMapper: TopicoFormMapper,
-    private val notFoundMessage: String = "Topico nao encontrado"
+    private val notFoundMessage: String = "Topico nao encontrado",
+    private val em: EntityManager //spring injeta o EM para nós
 ) {
 
 
@@ -35,6 +37,9 @@ class TopicoService(
 //            repository.findByCursoNome(nomeCurso)
 //        }
         //utilizando recursos do Kotlin
+
+        print(em)//caso necessite do EntityManager é possivel injetar dentro do service
+
         var topicos: Page<Topico> = Page.empty()
 
         nomeCurso?.let {
