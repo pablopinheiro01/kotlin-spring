@@ -18,11 +18,17 @@ class SecurityConfiguration(
 
     override fun configure(http: HttpSecurity?) {
         //autoriza qualquer requisição se tiver autenticada
-        http?.authorizeHttpRequests()?.anyRequest()?.authenticated()?.
+        http?.authorizeHttpRequests()?.
+        antMatchers("/topicos")?.//mach para a url
+        hasAuthority("LEITURA_ESCRITA")?. //tipo de role que possui permissao
+        anyRequest()?.
+        authenticated()?.
         and()?.
-        sessionManagement()?.sessionCreationPolicy(SessionCreationPolicy.STATELESS)?.//nao guardo estado
+        sessionManagement()?.
+        sessionCreationPolicy(SessionCreationPolicy.STATELESS)?.//nao guardo estado
         and()?.
-        formLogin()?.disable()?.
+        formLogin()?.
+        disable()?.
         httpBasic()
     }
 
