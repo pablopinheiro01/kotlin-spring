@@ -13,3 +13,5 @@ spring:
   h2:
     console:
       enabled: true
+jwt:
+  secret: sdas@!27.219kd
