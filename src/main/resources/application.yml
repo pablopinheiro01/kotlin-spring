@@ -14,4 +14,4 @@ spring:
     console:
       enabled: true
 jwt:
-  secret: sdas@!27.219kd
+  secret: senhadoida
