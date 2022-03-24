@@ -26,6 +26,7 @@ class SecurityConfiguration(
         http?.
         csrf()?.disable()?.//desabilitando CSRF para permitir as requests (inseguro para ambientes produtivos)
         authorizeHttpRequests()?.
+        antMatchers("/topicos")?.hasAuthority("LEITURA_ESCRITA")?.//RETORNADO o parametro de verificacao das roles
         antMatchers(HttpMethod.POST,"/login")?.permitAll()?.//permitindo todos acessarem o login
         anyRequest()?.
         authenticated()?.
