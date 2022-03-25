@@ -48,3 +48,14 @@ Ex Payload:
 Url de Request:
 localhost:8080/topicos
 Header: Bearer ...(acima)
+
+#PRofiles do Spring
+Comandos executados apos configuração dos profiles
+
+#Executa o spring
+mvn spring-boot:run
+
+#Setando um profile
+Para selecionar o profile correto, passe a flag -Dspring.profile.active=${valor_desejado}
+
+mvn spring-boot:run -Dspring.profile.active=prod
