@@ -59,3 +59,11 @@ mvn spring-boot:run
 Para selecionar o profile correto, passe a flag -Dspring.profile.active=${valor_desejado}
 
 mvn spring-boot:run -Dspring.profile.active=prod
+
+#Comando Docker para build do Dockerfile
+terminal>docker build -t forum -f Dockerfile .
+
+#Execuçao do comando docker para rodar o projeto
+docker run -p 3080:8080 forum
+
+#Rodando no docker os endpoints todos foram alterados para a porta 3080 do docker
